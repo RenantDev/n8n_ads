@@ -9,8 +9,8 @@ Este projeto permite criar e gerenciar facilmente automações e integrações e
 ## Tecnologias
 
 - **N8N**: Ferramenta de automação de fluxos de trabalho com interface visual
-- **Evolution API**: API para integração com WhatsApp
-- **PostgreSQL**: Banco de dados
+- **Evolution API v2.3.4**: API para integração com WhatsApp (compilado do GitHub)
+- **PostgreSQL 14**: Banco de dados
 - **Redis**: Cache
 
 ## Requisitos
@@ -33,11 +33,12 @@ Este projeto permite criar e gerenciar facilmente automações e integrações e
    Este script criará automaticamente o arquivo `.env.example` e copiará para `.env` se não existir.
 
 3. (Opcional) Ajuste as variáveis de ambiente no arquivo `.env` conforme necessário:
-   - `POSTGRES_DB`: Nome do banco de dados PostgreSQL
-   - `POSTGRES_USER`: Usuário do PostgreSQL
-   - `POSTGRES_PASSWORD`: Senha do PostgreSQL
-   - `EVOLUTION_DB`: Nome do banco de dados para a Evolution API
-   - `AUTHENTICATION_API_KEY`: Chave para autenticação na Evolution API
+   - **PostgreSQL**: `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `EVOLUTION_DB`
+   - **Evolution API Authentication**: `AUTHENTICATION_API_KEY` (gerado automaticamente)
+   - **Evolution API Logs**: `LOG_LEVEL`, `LOG_COLOR`, `LOG_BAILEYS`
+   - **Evolution API Database**: Configurações de salvamento de dados
+   - **Evolution API Instance**: `CONFIG_SESSION_PHONE_VERSION`, `DEL_INSTANCE`
+   - **Evolution API Integrations**: `RABBITMQ_ENABLED`, `WEBSOCKET_ENABLED`, `WEBHOOK_GLOBAL_ENABLED`
 
 4. Inicie os serviços:
    ```bash
@@ -46,13 +47,16 @@ Este projeto permite criar e gerenciar facilmente automações e integrações e
 
 5. Acesse as interfaces:
    - **N8N**: http://localhost:5678
-   - **Evolution API**: http://localhost:8080
+   - **Evolution API**: http://localhost:8080/manager
 
 ## Estrutura de Diretórios
 
 - `data/`: Arquivos persistentes dos containers
 - `docker-compose.yml`: Configuração dos serviços Docker
+- `Dockerfile.evolution`: Dockerfile customizado para Evolution API v2.3.4
 - `setup.sh`: Script para configurar o ambiente
+- `.env`: Variáveis de ambiente (gerado pelo setup.sh)
+- `.env.example`: Template de variáveis de ambiente
 
 ## Resolução de Problemas
 

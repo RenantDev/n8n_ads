@@ -126,11 +126,39 @@ API_KEY_HASH=$(generate_hash)
 # Cria o arquivo .env.example se não existir
 if [ ! -f .env.example ]; then
     cat > .env.example << EOF
+# PostgreSQL Configuration
 POSTGRES_DB=n8n
 POSTGRES_USER=n8n
-POSTGRES_PASSWORD=n8n
+POSTGRES_PASSWORD=n8npw
 EVOLUTION_DB=evolution
+
+# Evolution API - Authentication
 AUTHENTICATION_API_KEY=${API_KEY_HASH}
+
+# Evolution API - Logs
+LOG_LEVEL=ERROR,WARN,DEBUG,INFO,LOG,VERBOSE,DARK,WEBHOOKS
+LOG_COLOR=true
+LOG_BAILEYS=error
+
+# Evolution API - Database Save Options
+DATABASE_SAVE_DATA_INSTANCE=true
+DATABASE_SAVE_DATA_NEW_MESSAGE=true
+DATABASE_SAVE_MESSAGE_UPDATE=true
+DATABASE_SAVE_DATA_CONTACTS=true
+DATABASE_SAVE_DATA_CHATS=true
+DATABASE_SAVE_DATA_LABELS=true
+DATABASE_SAVE_DATA_HISTORIC=true
+
+# Evolution API - Instance Management
+DEL_INSTANCE=false
+EVENT_EMITTER_MAX_LISTENERS=50
+CONFIG_SESSION_PHONE_VERSION=2.3000.1020885143
+CONFIG_SESSION_PHONE_CLIENT=Evolution API
+
+# Evolution API - Integrations
+RABBITMQ_ENABLED=false
+WEBSOCKET_ENABLED=false
+WEBHOOK_GLOBAL_ENABLED=false
 EOF
     echo -e "${GREEN}Arquivo .env.example criado com sucesso!${NC}"
 fi
