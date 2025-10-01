@@ -3,9 +3,12 @@
 
 # Diretórios de dados
 data/
+memory_data/
 postgres_data/
 redis_data/
 n8n_data/
+mongodb_data/
+evolution_instances/
 
 # Logs
 *.log
