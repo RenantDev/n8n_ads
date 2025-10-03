@@ -133,7 +133,7 @@ POSTGRES_PASSWORD=n8npw
 EVOLUTION_DB=evolution
 
 # Evolution API v1.8.7 - Authentication
-AUTHENTICATION_API_KEY=${API_KEY_HASH}
+AUTHENTICATION_API_KEY=suachaveapi
 
 # Evolution API - Database Save Options
 DATABASE_SAVE_DATA_INSTANCE=true
@@ -154,51 +154,84 @@ EOF
     echo -e "${GREEN}Arquivo .env.example criado com sucesso!${NC}"
 fi
 
-# Copia .env.example para .env se .env não existir
-if [ ! -f .env ]; then
-    cp .env.example .env
-    echo -e "${GREEN}Arquivo .env criado com sucesso!${NC}"
-else
-    # Se o arquivo .env já existe, apenas atualiza a AUTHENTICATION_API_KEY
-    if grep -q "AUTHENTICATION_API_KEY=suachaveapi" .env; then
-        sed -i "s/AUTHENTICATION_API_KEY=suachaveapi/AUTHENTICATION_API_KEY=${API_KEY_HASH}/" .env
-        echo -e "${GREEN}AUTHENTICATION_API_KEY atualizada com uma nova hash!${NC}"
-    fi
-    echo -e "${GREEN}Arquivo .env já existe. Verificação de chave API concluída.${NC}"
+# Remove .env existente e cria um novo com a hash gerada
+if [ -f .env ]; then
+    rm .env
+    echo -e "${YELLOW}Arquivo .env existente removido.${NC}"
 fi
+
+# Copia .env.example e substitui a API key placeholder pela hash gerada
+cp .env.example .env
+sed -i "s/AUTHENTICATION_API_KEY=suachaveapi/AUTHENTICATION_API_KEY=${API_KEY_HASH}/" .env
+echo -e "${GREEN}Arquivo .env criado com sucesso!${NC}"
 
 echo -e "${GREEN}Configuração concluída. Você pode executar 'docker compose up' agora.${NC}"
 echo -e "${YELLOW}Hash gerada para AUTHENTICATION_API_KEY:${NC} ${API_KEY_HASH}"
 
-# Perguntar se o usuário deseja iniciar os serviços Docker
+# Verificar se há containers rodando e perguntar sobre reinicialização
 echo ""
-read -p "Deseja iniciar os serviços Docker agora? (s/N): " start_docker
-case "$start_docker" in
-    s|S|sim|Sim|SIM )
-        echo -e "${GREEN}Iniciando serviços Docker...${NC}"
-        docker compose up -d
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}✓ Serviços iniciados com sucesso!${NC}"
-            echo ""
-            echo -e "${GREEN}=== Acesso aos Serviços ===${NC}"
-            echo -e "  - n8n: ${YELLOW}http://localhost:5678${NC}"
-            echo -e "  - Evolution API: ${YELLOW}http://localhost:8080${NC}"
-            echo -e "  - Evolution Manager: ${YELLOW}http://localhost:8080/manager${NC}"
-            echo -e "  - Evolution Swagger: ${YELLOW}http://localhost:8080/docs${NC}"
-            echo ""
-            echo -e "${GREEN}=== Informações da Stack ===${NC}"
-            echo -e "  - Evolution API: ${YELLOW}v1.8.7${NC}"
-            echo -e "  - MongoDB: ${YELLOW}v6${NC} (porta 27017)"
-            echo -e "  - PostgreSQL: ${YELLOW}v17${NC} (porta 5432 - para n8n)"
-            echo -e "  - Redis: ${YELLOW}Alpine${NC} (porta 6379)"
-            echo ""
-            echo -e "${GREEN}=== Chave de Autenticação ===${NC}"
-            echo -e "  API Key: ${YELLOW}${API_KEY_HASH}${NC}"
-        else
-            echo -e "${RED}✗ Houve um erro ao iniciar os serviços. Verifique o log acima.${NC}"
-        fi
-        ;;
-    * )
-        echo -e "${YELLOW}Para iniciar os serviços posteriormente, execute:${NC} docker compose up -d"
-        ;;
-esac 
+if docker compose ps --quiet 2>/dev/null | grep -q .; then
+    echo -e "${YELLOW}Containers já estão rodando.${NC}"
+    read -p "Deseja reiniciar os serviços Docker para aplicar as novas configurações? (s/N): " restart_docker
+    case "$restart_docker" in
+        s|S|sim|Sim|SIM )
+            echo -e "${GREEN}Reiniciando serviços Docker...${NC}"
+            docker compose down
+            docker compose up -d
+            if [ $? -eq 0 ]; then
+                echo -e "${GREEN}✓ Serviços reiniciados com sucesso!${NC}"
+                echo ""
+                echo -e "${GREEN}=== Acesso aos Serviços ===${NC}"
+                echo -e "  - n8n: ${YELLOW}http://localhost:5678${NC}"
+                echo -e "  - Evolution API: ${YELLOW}http://localhost:8080${NC}"
+                echo -e "  - Evolution Manager: ${YELLOW}http://localhost:8080/manager${NC}"
+                echo -e "  - Evolution Swagger: ${YELLOW}http://localhost:8080/docs${NC}"
+                echo ""
+                echo -e "${GREEN}=== Informações da Stack ===${NC}"
+                echo -e "  - Evolution API: ${YELLOW}v1.8.7${NC}"
+                echo -e "  - MongoDB: ${YELLOW}v6${NC} (porta 27017)"
+                echo -e "  - PostgreSQL: ${YELLOW}v17${NC} (porta 5432 - para n8n)"
+                echo -e "  - Redis: ${YELLOW}Alpine${NC} (porta 6379)"
+                echo ""
+                echo -e "${GREEN}=== Chave de Autenticação ===${NC}"
+                echo -e "  API Key: ${YELLOW}${API_KEY_HASH}${NC}"
+            else
+                echo -e "${RED}✗ Houve um erro ao reiniciar os serviços. Verifique o log acima.${NC}"
+            fi
+            ;;
+        * )
+            echo -e "${YELLOW}Para aplicar as novas configurações, execute:${NC} docker compose restart"
+            ;;
+    esac
+else
+    read -p "Deseja iniciar os serviços Docker agora? (s/N): " start_docker
+    case "$start_docker" in
+        s|S|sim|Sim|SIM )
+            echo -e "${GREEN}Iniciando serviços Docker...${NC}"
+            docker compose up -d
+            if [ $? -eq 0 ]; then
+                echo -e "${GREEN}✓ Serviços iniciados com sucesso!${NC}"
+                echo ""
+                echo -e "${GREEN}=== Acesso aos Serviços ===${NC}"
+                echo -e "  - n8n: ${YELLOW}http://localhost:5678${NC}"
+                echo -e "  - Evolution API: ${YELLOW}http://localhost:8080${NC}"
+                echo -e "  - Evolution Manager: ${YELLOW}http://localhost:8080/manager${NC}"
+                echo -e "  - Evolution Swagger: ${YELLOW}http://localhost:8080/docs${NC}"
+                echo ""
+                echo -e "${GREEN}=== Informações da Stack ===${NC}"
+                echo -e "  - Evolution API: ${YELLOW}v1.8.7${NC}"
+                echo -e "  - MongoDB: ${YELLOW}v6${NC} (porta 27017)"
+                echo -e "  - PostgreSQL: ${YELLOW}v17${NC} (porta 5432 - para n8n)"
+                echo -e "  - Redis: ${YELLOW}Alpine${NC} (porta 6379)"
+                echo ""
+                echo -e "${GREEN}=== Chave de Autenticação ===${NC}"
+                echo -e "  API Key: ${YELLOW}${API_KEY_HASH}${NC}"
+            else
+                echo -e "${RED}✗ Houve um erro ao iniciar os serviços. Verifique o log acima.${NC}"
+            fi
+            ;;
+        * )
+            echo -e "${YELLOW}Para iniciar os serviços posteriormente, execute:${NC} docker compose up -d"
+            ;;
+    esac
+fi 
