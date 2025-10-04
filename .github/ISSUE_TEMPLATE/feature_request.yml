@@ -1,0 +1,75 @@
+name: Feature Request
+description: Sugerir uma nova funcionalidade ou melhoria
+title: "[FEATURE] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por sugerir uma nova funcionalidade! Por favor, preencha as informações abaixo.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema Relacionado
+      description: Esta feature request está relacionada a algum problema?
+      placeholder: "Exemplo: Fico frustrado quando..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solução Proposta
+      description: Descreva a solução que você gostaria de ver implementada
+      placeholder: Descreva sua solução ideal
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas Consideradas
+      description: Você considerou alguma solução ou funcionalidade alternativa?
+      placeholder: Descreva alternativas que você já considerou
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Componente Afetado
+      description: Qual componente esta feature afetaria?
+      options:
+        - N8N
+        - Evolution API
+        - PostgreSQL
+        - MongoDB
+        - Redis
+        - Docker Compose
+        - Documentação
+        - Scripts de Setup
+        - Outro
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Caso de Uso
+      description: Como você usaria esta funcionalidade?
+      placeholder: Descreva um cenário real de uso
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribuição
+      description: Você estaria disposto a contribuir com esta funcionalidade?
+      options:
+        - label: Eu gostaria de trabalhar nesta feature
+          required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Informações Adicionais
+      description: Qualquer outra informação relevante sobre esta feature
+      placeholder: Screenshots, mockups, referências, etc.

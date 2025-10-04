@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentação
+    url: https://github.com/RenantDev/n8n_ads/blob/main/README.md
+    about: Consulte a documentação do projeto
+  - name: N8N Community
+    url: https://community.n8n.io/
+    about: Comunidade oficial do N8N para dúvidas gerais
+  - name: Evolution API Docs
+    url: https://doc.evolution-api.com/
+    about: Documentação oficial da Evolution API

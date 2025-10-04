@@ -1,0 +1,96 @@
+name: Bug Report
+description: Reportar um bug ou problema
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por reportar um bug! Por favor, preencha as informações abaixo para nos ajudar a resolver o problema.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrição do Bug
+      description: Uma descrição clara e concisa do problema
+      placeholder: O que aconteceu?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Passos para Reproduzir
+      description: Passos para reproduzir o comportamento
+      placeholder: |
+        1. Execute '...'
+        2. Configure '...'
+        3. Acesse '...'
+        4. Veja o erro
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento Esperado
+      description: O que você esperava que acontecesse?
+      placeholder: Descreva o comportamento esperado
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Comportamento Atual
+      description: O que realmente aconteceu?
+      placeholder: Descreva o comportamento atual
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Se aplicável, adicione logs relevantes
+      placeholder: Cole os logs aqui (use docker compose logs)
+      render: shell
+
+  - type: input
+    id: docker-version
+    attributes:
+      label: Versão do Docker
+      description: Execute `docker --version`
+      placeholder: "Docker version 24.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: docker-compose-version
+    attributes:
+      label: Versão do Docker Compose
+      description: Execute `docker compose version`
+      placeholder: "Docker Compose version v2.20.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Sistema Operacional
+      description: Qual sistema operacional você está usando?
+      options:
+        - Linux
+        - macOS
+        - Windows
+        - Windows (WSL)
+        - Outro
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Informações Adicionais
+      description: Qualquer outra informação relevante sobre o problema
+      placeholder: Screenshots, contexto adicional, etc.
