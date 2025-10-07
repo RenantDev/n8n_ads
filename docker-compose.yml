@@ -16,7 +16,7 @@ services:
       - DB_POSTGRESDB_USER=${POSTGRES_USER}
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
       - NODE_ENV=production
-      - WEBHOOK_URL=http://n8n:5678/
+      - WEBHOOK_URL=http://localhost:5678/
     volumes:
       - n8n_data:/home/node/.n8n
     depends_on:
@@ -39,7 +39,7 @@ services:
       - n8n_network
       
   evolution-api:
-    image: atendai/evolution-api:v1.8.7
+    image: atendai/evolution-api:v2.2.3
     container_name: evolution-api
     restart: always
     ports:
@@ -51,9 +51,9 @@ services:
       - SERVER_URL=http://localhost:8080
       - AUTHENTICATION_API_KEY=${AUTHENTICATION_API_KEY}
       - DATABASE_ENABLED=true
-      - DATABASE_PROVIDER=mongodb
-      - DATABASE_CONNECTION_URI=mongodb://mongodb:27017/evolution
-      - DATABASE_CONNECTION_CLIENT_NAME=evolution_v1
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${EVOLUTION_DB}
+      - DATABASE_CONNECTION_CLIENT_NAME=evolution_v2
       - DATABASE_SAVE_DATA_INSTANCE=true
       - DATABASE_SAVE_DATA_NEW_MESSAGE=true
       - DATABASE_SAVE_MESSAGE_UPDATE=true
@@ -67,19 +67,8 @@ services:
       - LOG_LEVEL=ERROR,WARN,DEBUG,INFO,LOG,VERBOSE,DARK,WEBHOOKS
       - LOG_COLOR=true
     depends_on:
-      - mongodb
+      - postgres
       - redis
-    networks:
-      - n8n_network
-
-  mongodb:
-    image: mongo:6
-    container_name: mongodb
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
     networks:
       - n8n_network
 
